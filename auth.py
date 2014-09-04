@@ -8,6 +8,7 @@ __author__ = 'arajendran'
 
 import cherrypy
 from check_user import check_user
+from add_user import add_user
 
 SESSION_KEY = '_cp_username'
 
@@ -119,6 +120,16 @@ class AuthController(object):
             <input type="submit" value="Log in" />
         </body></html>""" % locals()
 
+    def get_registerform(self, username, msg="Create login information", from_page="/"):
+        return """<html><body>
+            <form method="post" action="/auth/register">
+            <input type="hidden" name="from_page" value="%(from_page)s" />
+            %(msg)s<br />
+            Username: <input type="text" name="username" value="%(username)s" /><br />
+            Password: <input type="password" name="password" /><br />
+            <input type="submit" value="Register" />
+        </body></html>""" % locals()
+
     @cherrypy.expose
     def login(self, username=None, password=None, from_page="/"):
         if username is None or password is None:
@@ -141,3 +152,14 @@ class AuthController(object):
             cherrypy.request.login = None
             self.on_logout(username)
         raise cherrypy.HTTPRedirect(from_page or "/")
+
+    @cherrypy.expose
+    def register(self, username=None, password=None, from_page="/"):
+        if username is None or password is None:
+            return self.get_registerform("",from_page=from_page)
+        error_msg = add_user(username,password)
+        if error_msg:
+            return self.get_registerform(username, error_msg, from_page)
+        else:
+            add_user(username,password)
+            return self.login(username,password)

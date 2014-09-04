@@ -13,6 +13,15 @@ def add_user(user,pwd):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
-    new_user = Users(username=user,password=sha256_crypt.encrypt(pwd))
-    session.add(new_user)
-    session.commit()
+    q = session.query(Users).filter(Users.username == user).first()
+    if user == "":
+        return "Please enter a valid username"
+    if pwd == "":
+        return "Please enter a valid password"
+    if hasattr(q, 'username'):
+        return "Username already exists"
+    else:
+        new_user = Users(username=user,password=sha256_crypt.encrypt(pwd))
+        session.add(new_user)
+        session.commit()
+        return None

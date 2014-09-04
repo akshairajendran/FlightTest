@@ -33,6 +33,7 @@ class Root:
         return """<html><body>
             <p>Welcome to FlightTest!</p>
             <a href="/auth/login">Login</a>
+            <a href="/auth/register">Register</a>
         </body></html>"""
 
     @cherrypy.expose
