@@ -7,8 +7,7 @@ __author__ = 'arajendran'
 #
 
 import cherrypy
-from check_user import check_user
-from add_user import add_user
+from db_func import add_user, check_user
 
 SESSION_KEY = '_cp_username'
 

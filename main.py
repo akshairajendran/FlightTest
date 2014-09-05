@@ -2,20 +2,7 @@ __author__ = 'arajendran'
 
 import cherrypy
 from auth import AuthController, require, member_of, name_is
-
-class RestrictedArea:
-
-    # all methods in this controller (and subcontrollers) is
-    # open only to members of the admin group
-
-    _cp_config = {
-        'auth.require': []
-    }
-
-    @cherrypy.expose
-    def index(self):
-        return """This is the admin only area."""
-
+import db_func
 
 class Root:
 
@@ -25,8 +12,6 @@ class Root:
     }
 
     auth = AuthController()
-
-    restricted = RestrictedArea()
 
     @cherrypy.expose
     def index(self):
@@ -38,23 +23,37 @@ class Root:
 
     @cherrypy.expose
     @require()
-    def home(self):
+    def home(self,msg="You're now logged in."):
         return """<html><body>
-            <p>Hello %s, you're now logged in.</p>
+            <p>Hello %s</p>
+            %s</br></br>
+            <a href="/new_flight">New Flight</a></br>
             <a href="/auth/logout">Logout</a>
-        </html></body>""" %cherrypy.request.login
+        </html></body>""" %(cherrypy.request.login, msg)
 
     @cherrypy.expose
-    @require(name_is("joe"))
-    def only_for_joe(self):
-        return """Hello Joe - this page is available to you only"""
+    @require()
+    def new_flight(self, msg="Add new flight"):
+        return """<html><body>
+        <form method="post" action="/add_flight">
+        %(msg)s<br />
+        Departure Airport: <input type="text" name="airport_from"/><br />
+        Arrival Airport: <input type="text" name="airport_to"/><br />
+        Date: <input type="date" name="date"/><br />
+        Flight No.: <input type="number" name="flight_no"/><br />
+        <input type="submit" value="Add Flight" />
+        </html></body>""" % locals()
 
-    # This is only available if the user name is joe _and_ he's in group admin
     @cherrypy.expose
-    @require(name_is("joe"))
-    @require(member_of("admin"))   # equivalent: @require(name_is("joe"), member_of("admin"))
-    def only_for_joe_admin(self):
-        return """Hello Joe Admin - this page is available to you only"""
+    @require()
+    def add_flight(self,airport_from=None, airport_to=None, date=None, flight_no=None):
+        if airport_from is None or airport_to is None or date is None or flight_no is None:
+            return self.new_flight("Please enter all information")
+        else:
+            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,flight_no)
+            return self.home(msg="Your flight has been added.")
+
+
 
 
 if __name__ == '__main__':
