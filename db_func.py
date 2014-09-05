@@ -43,7 +43,7 @@ def check_user(user,pwd):
     else:
         return "User does not exist"
 
-def add_flight(user, airport_from, airport_to, date, flight_no):
+def add_flight(user, airport_from, airport_to, date, carrier, flight_no):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
 
@@ -55,7 +55,7 @@ def add_flight(user, airport_from, airport_to, date, flight_no):
     else:
         q = session.query(Users).filter(Users.username == user).first()
         date_format = datetime.datetime.strptime(date, '%Y-%M-%d').date()
-        new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, flight_no = flight_no)
+        new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no)
         new_flight.user = q
         session.add(new_flight)
         session.commit()

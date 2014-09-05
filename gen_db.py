@@ -28,6 +28,7 @@ class Flights(Base):
     airport_from = Column(String(3))
     airport_to = Column(String(3))
     date = Column(Date)
+    carrier = Column(String(50))
     flight_no = Column(Integer)
     binary = Column(Integer, default = 0)
 

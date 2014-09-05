@@ -39,18 +39,19 @@ class Root:
         %(msg)s<br />
         Departure Airport: <input type="text" name="airport_from"/><br />
         Arrival Airport: <input type="text" name="airport_to"/><br />
-        Date: <input type="date" name="date"/><br />
+        Date: <input type="date" name="date" value=""/><br />
+        Carrier: <input type="text" name="carrier"/><br />
         Flight No.: <input type="number" name="flight_no"/><br />
         <input type="submit" value="Add Flight" />
         </html></body>""" % locals()
 
     @cherrypy.expose
     @require()
-    def add_flight(self,airport_from=None, airport_to=None, date=None, flight_no=None):
-        if airport_from is None or airport_to is None or date is None or flight_no is None:
+    def add_flight(self, airport_from=None, airport_to=None, date=None, carrier=None, flight_no=None):
+        if airport_from is None or airport_to is None or date == "" or carrier is None or flight_no is None:
             return self.new_flight("Please enter all information")
         else:
-            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,flight_no)
+            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no)
             return self.home(msg="Your flight has been added.")
 
 
