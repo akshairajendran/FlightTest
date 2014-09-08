@@ -60,3 +60,18 @@ def add_flight(user, airport_from, airport_to, date, carrier, flight_no):
         session.add(new_flight)
         session.commit()
         return None
+
+def display_flights(user, binary):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    q = session.query(Users).filter(Users.username == user).first()
+    if binary == 2:
+        all_flights = session.query(Flights).filter(Flights.user == q).all()
+    else:
+        all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
+    list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
+    return list
