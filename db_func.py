@@ -72,9 +72,13 @@ def display_flights(user, binary):
     q = session.query(Users).filter(Users.username == user).first()
     if binary == 2:
         all_flights = session.query(Flights).filter(Flights.user == q).all()
+        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
+    elif binary == 1:
+        all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
+        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
     else:
         all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
-    list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
+        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
     session.commit()
     return list
 
