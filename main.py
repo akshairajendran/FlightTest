@@ -45,16 +45,17 @@ class Root:
         Date: <input type="date" name="date"/><br />
         Carrier: <input type="text" name="carrier"/><br />
         Flight No.: <input type="number" name="flight_no"/><br />
+        Recipient: <input type="text" name="recipient"/><br />
         <input type="submit" value="Add Flight" />
         </form></html></body>""" % locals()
 
     @cherrypy.expose
     @require()
-    def add_flight(self, airport_from=None, airport_to=None, date=None, carrier=None, flight_no=None):
-        if len(airport_from) < 1 or len(airport_to) < 1 or date=='' or len(carrier) < 1 or len(flight_no) < 1:
+    def add_flight(self, airport_from=None, airport_to=None, date=None, carrier=None, flight_no=None, recipient=None):
+        if len(airport_from) < 1 or len(airport_to) < 1 or date=='' or len(carrier) < 1 or len(flight_no) < 1 or len(recipient) < 1:
             return self.new_flight("Please enter all information")
         else:
-            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no)
+            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no, recipient)
             return self.home(msg="Your flight has been added.")
 
     @cherrypy.expose

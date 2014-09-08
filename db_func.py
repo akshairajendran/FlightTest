@@ -44,19 +44,19 @@ def check_user(user,pwd):
     else:
         return "User does not exist"
 
-def add_flight(user, airport_from, airport_to, date, carrier, flight_no):
+def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipient):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
 
     DBSession = sessionmaker()
     session = DBSession()
 
-    if user is None or airport_from is None or airport_to is None or date is None or flight_no is None:
+    if user is None or airport_from is None or airport_to is None or date is None or flight_no is None or recipient is None:
         return "Please enter all information"
     else:
         q = session.query(Users).filter(Users.username == user).first()
         date_format = datetime.datetime.strptime(date, '%Y-%M-%d').date()
-        new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no)
+        new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, recipient = recipient)
         new_flight.user = q
         session.add(new_flight)
         session.commit()
@@ -78,7 +78,7 @@ def display_flights(user, binary):
         list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
     else:
         all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
-        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
+        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, all_flights[i].recipient, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
     session.commit()
     return list
 
