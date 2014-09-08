@@ -93,5 +93,6 @@ def del_flight(user, flightid):
     q = session.query(Users).filter(Users.username == user).first()
     flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).delete()
     session.commit()
+    return
 
 
