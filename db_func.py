@@ -74,5 +74,20 @@ def display_flights(user, binary):
         all_flights = session.query(Flights).filter(Flights.user == q).all()
     else:
         all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
-    list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
+    list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
+    session.commit()
     return list
+
+
+def del_flight(user, flightid):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    q = session.query(Users).filter(Users.username == user).first()
+    flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).delete()
+    session.commit()
+
+

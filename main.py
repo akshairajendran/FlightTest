@@ -77,6 +77,12 @@ class Root:
         <a href="/home">Home</a>
         </body></html>""" % htmlcode
 
+    @cherrypy.expose
+    @require()
+    def del_flight(self,flightid):
+        db_func.del_flight(cherrypy.request.login, int(flightid))
+        raise cherrypy.HTTPRedirect("/upcoming_flights")
+
 
 if __name__ == '__main__':
     cherrypy.quickstart(Root())
