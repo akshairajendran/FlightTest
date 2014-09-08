@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from passlib.hash import sha256_crypt
 import datetime
+import HTML
 
 from gen_db import Base, Users, Flights
 

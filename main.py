@@ -3,6 +3,7 @@ __author__ = 'arajendran'
 import cherrypy
 from auth import AuthController, require, member_of, name_is
 import db_func
+import HTML
 
 class Root:
 
@@ -28,7 +29,9 @@ class Root:
             <p>Hello %s</p>
             %s</br></br>
             <a href="/new_flight">New Flight</a></br>
-            <a href="/auth/logout">Logout</a>
+            <a href="/previous_flights">Previous Flights</a></br>
+            <a href="/upcoming_flights">Upcoming Flights</a></br>
+            <a href="/auth/logout">Logout</a></br>
         </html></body>""" %(cherrypy.request.login, msg)
 
     @cherrypy.expose
@@ -54,7 +57,25 @@ class Root:
             db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no)
             return self.home(msg="Your flight has been added.")
 
+    @cherrypy.expose
+    @require()
+    def previous_flights(self):
+        list = db_func.display_flights(cherrypy.request.login,1)
+        htmlcode = HTML.table(list, ['Departure Airport','Arrival Airport','Date','Carrier','Flight No.'])
+        return """<html><body>
+        %s </br>
+        <a href="/home">Home</a>
+        </body></html>""" % htmlcode
 
+    @cherrypy.expose
+    @require()
+    def upcoming_flights(self):
+        list = db_func.display_flights(cherrypy.request.login,0)
+        htmlcode = HTML.table(list, ['Departure Airport','Arrival Airport','Date','Carrier','Flight No.'])
+        return """<html><body>
+        %s </br>
+        <a href="/home">Home</a>
+        </body></html>""" % htmlcode
 
 
 if __name__ == '__main__':
