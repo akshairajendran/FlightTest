@@ -19,5 +19,4 @@ logging.basicConfig(level=logging.INFO)
 api = Client(url, username=username, password=apiKey)
 
 #Get the weather
-result = api.service.Metar('KAUS')
-print result
+api.service.RegisterAlertEndpoint('http://akshairajendran.com/flightserve','json/post')
