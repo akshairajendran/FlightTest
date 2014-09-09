@@ -2,7 +2,7 @@ __author__ = 'arajendran'
 
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
 from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCRequestHandler
-
+from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCDispatcher
 
 server = SimpleJSONRPCServer(('localhost', 13167), requestHandler=SimpleJSONRPCRequestHandler, logRequests=True)
 
