@@ -4,6 +4,7 @@ import cherrypy
 from auth import AuthController, require, member_of, name_is
 import db_func
 import HTML
+import flight_update
 
 class Root:
 
@@ -55,6 +56,17 @@ class Root:
         if len(airport_from) < 1 or len(airport_to) < 1 or date=='' or len(carrier) < 1 or len(flight_no) < 1 or len(recipient) < 1:
             return self.new_flight("Please enter all information")
         else:
+            if db_func.check_myflight(user=cherrypy.request.login,date=date, carrier=carrier, flight_no=flight_no):
+                return self.new_flight("You've already entered this flight")
+            else:
+                pass
+            if db_func.check_flight(user=cherrypy.request.login,date=date, carrier=carrier, flight_no=flight_no):
+                pass
+            else:
+                if flight_update.check_flight(airport_from,airport_to,date,carrier,flight_no):
+                    flight_update.set_alert(airport_from,airport_to,date,carrier,flight_no)
+                else:
+                    return self.new_flight("Please enter a valid flight")
             db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no, recipient)
             return self.home(msg="Your flight has been added.")
 

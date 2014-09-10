@@ -108,3 +108,24 @@ def check_flight(user=None, date=None, carrier=None, flight_no=None, flightid=No
     else:
         return False
 
+def check_myflight(user=None, date=None, carrier=None, flight_no=None, flightid=None):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    q = session.query(Users).filter(Users.username == user).first()
+
+    if flightid != None:
+        flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).first()
+        date = flight.date
+        carrier = flight.carrier
+        flight_no = flight.flight_no
+    else:
+        date = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+    query = session.query(Flights).filter(Flights.user == q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
+    if hasattr(query, 'date'):
+        return True
+    else:
+        return False
+
