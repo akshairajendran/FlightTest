@@ -49,7 +49,7 @@ def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipie
     session = DBSession()
 
     q = session.query(Users).filter(Users.username == user).first()
-    date_format = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+    date_format = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, recipient = recipient)
     new_flight.user = q
     session.add(new_flight)
@@ -126,6 +126,23 @@ def check_myflight(user=None, date=None, carrier=None, flight_no=None, flightid=
     query = session.query(Flights).filter(Flights.user == q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
     if hasattr(query, 'date'):
         return True
+    else:
+        return False
+
+def get_attr(attr, flightid):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    flight = session.query(Flights).filter(Flights.id == flightid).first()
+
+    if attr == 'date':
+        return flight.date.strftime('%Y-%m-%d')
+    elif attr == 'carrier':
+        return flight.carrier
+    elif attr == 'flight_no':
+        return flight.flight_no
     else:
         return False
 

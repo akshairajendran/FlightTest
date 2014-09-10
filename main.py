@@ -93,6 +93,10 @@ class Root:
     @cherrypy.expose
     @require()
     def del_flight(self,flightid):
+        if db_func.check_flight(user=cherrypy.request.login,flightid=flightid):
+            pass
+        else:
+            flight_update.del_alert(db_func.get_attr('date',flightid),db_func.get_attr('carrier',flightid),db_func.get_attr('flight_no',flightid))
         db_func.del_flight(cherrypy.request.login, int(flightid))
         raise cherrypy.HTTPRedirect("/upcoming_flights")
 
