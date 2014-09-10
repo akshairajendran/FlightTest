@@ -26,7 +26,8 @@ def reg_endpoint(endpoint = 'http://akshairajendran.com/flightserve'):
 
 #set alert for new flight
 def set_alert(airport_from, airport_to, date, carrier, flight_no):
-    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA'}
+    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
+                    'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
     carrier_code = flight_codes[carrier]
     ident = str(carrier_code) + str(flight_no)
     if check_flight(airport_from, airport_to, date, carrier, flight_no):

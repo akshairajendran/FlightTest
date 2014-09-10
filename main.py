@@ -44,10 +44,24 @@ class Root:
         Departure Airport: <input type="text" name="airport_from"/><br />
         Arrival Airport: <input type="text" name="airport_to"/><br />
         Date: <input type="date" name="date"/><br />
-        Carrier: <input type="text" name="carrier"/><br />
+        Carrier: <select name="carrier">
+        <option value="AirTran">AirTran</option>
+        <option value="Alaska">Alaska</option>
+        <option value="American">American</option>
+        <option value="Delta">Delta</option>
+        <option value="Frontier">Frontier</option>
+        <option value="Hawaiian">Hawaiian</option>
+        <option value="JetBlue">JetBlue</option>
+        <option value="Southwest">Southwest</option>
+        <option value="Spirit">Spirit</option>
+        <option value="United">United</option>
+        <option value="US Airways">US Airways</option>
+        <option value="Virgin">Virgin</option>
+        </select><br />
         Flight No.: <input type="number" name="flight_no"/><br />
         Recipient: <input type="text" name="recipient"/><br />
-        <input type="submit" value="Add Flight" />
+        <input type="submit" value="Add Flight" /></br>
+        <a href="/home">Home</a>
         </form></html></body>""" % locals()
 
     @cherrypy.expose
