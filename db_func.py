@@ -11,7 +11,6 @@ from gen_db import Base, Users, Flights
 def add_user(user,pwd):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
-
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
@@ -31,7 +30,6 @@ def add_user(user,pwd):
 def check_user(user,pwd):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
-
     DBSession = sessionmaker()
     session = DBSession()
 
@@ -47,25 +45,20 @@ def check_user(user,pwd):
 def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipient):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
-
     DBSession = sessionmaker()
     session = DBSession()
 
-    if user is None or airport_from is None or airport_to is None or date is None or flight_no is None or recipient is None:
-        return "Please enter all information"
-    else:
-        q = session.query(Users).filter(Users.username == user).first()
-        date_format = datetime.datetime.strptime(date, '%Y-%M-%d').date()
-        new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, recipient = recipient)
-        new_flight.user = q
-        session.add(new_flight)
-        session.commit()
-        return None
+    q = session.query(Users).filter(Users.username == user).first()
+    date_format = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+    new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, recipient = recipient)
+    new_flight.user = q
+    session.add(new_flight)
+    session.commit()
+    return None
 
 def display_flights(user, binary):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
-
     DBSession = sessionmaker()
     session = DBSession()
 
@@ -86,7 +79,6 @@ def display_flights(user, binary):
 def del_flight(user, flightid):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
-
     DBSession = sessionmaker()
     session = DBSession()
 
@@ -95,4 +87,24 @@ def del_flight(user, flightid):
     session.commit()
     return
 
+def check_flight(user=None, date=None, carrier=None, flight_no=None, flightid=None):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    q = session.query(Users).filter(Users.username == user).first()
+
+    if flightid != None:
+        flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).first()
+        date = flight.date
+        carrier = flight.carrier
+        flight_no = flight.flight_no
+    else:
+        date = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+    query = session.query(Flights).filter(Flights.user != q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
+    if hasattr(query, 'date'):
+        return True
+    else:
+        return False
 

@@ -18,5 +18,10 @@ url = 'http://flightxml.flightaware.com/soap/FlightXML2/wsdl'
 logging.basicConfig(level=logging.INFO)
 api = Client(url, username=username, password=apiKey)
 
-#Get the weather
-api.service.RegisterAlertEndpoint('http://akshairajendran.com/flightserve','json/post')
+#set endpoint
+def reg_endpoint(endpoint = 'http://akshairajendran.com/flightserve'):
+    api.service.RegisterAlertEndpoint(endpoint,'json/post')
+
+#set alert for new flight
+def set_alert(airport_from, airport_to, date, carrier, flight_no):
+    
