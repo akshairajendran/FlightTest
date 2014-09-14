@@ -41,7 +41,8 @@ def set_alert(airport_from, airport_to, date, carrier, flight_no):
         return False
 #delete alert
 def del_alert(date, carrier, flight_no):
-    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA'}
+    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
+                    'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
     carrier_code = flight_codes[carrier]
     ident = str(carrier_code) + str(flight_no)
     all_alerts = get_alert()
@@ -59,7 +60,8 @@ def get_alert():
 
 #get flight info
 def check_flight(airport_from, airport_to, date, carrier, flight_no):
-    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA'}
+    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
+                    'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
     carrier_code = flight_codes[carrier]
     ident = str(carrier_code) + str(flight_no)
     results = api.service.AirlineFlightSchedules(to_epoch(date),to_epoch(date)+86400,airport_from,airport_to,carrier_code,flight_no,15)

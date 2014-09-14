@@ -2,18 +2,22 @@ __author__ = 'arajendran'
 
 import SocketServer
 import json
+import db_func
 
-# from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
-# from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCRequestHandler
-# from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCDispatcher
-#
-# server = SimpleJSONRPCServer(('localhost', 13167), requestHandler=SimpleJSONRPCRequestHandler, logRequests=True)
-#
-# server.register_function(pow)
-# server.register_function(lambda x,y: x+y, 'add')
-# server.register_function(lambda x: x, 'ping')
-# server.register_function(lambda x,y: x*y, 'mult')
-# server.serve_forever()
+#define functions to clean and handle data
+def formatter(data):
+    #returns long_desc and ident
+    index = data.index('{')
+    data = str(data[index:] + '}}')
+    longdesc_index = data.index('long_desc')
+    shortdesc_index = data.index('short_desc')
+    ident_index = data.index('ident')
+    aircraft_index = data.index('aircrafttype')
+    long_desc = data[longdesc_index:shortdesc_index-3].translate(None,'"')
+    ident = data[ident_index:aircraft_index-3].translate(None,'"')
+    long_desc = long_desc[long_desc.index(':')+1:]
+    ident = ident[ident.index(':')+1:]
+    return [long_desc, ident]
 
 class MyTCPServer(SocketServer.ThreadingTCPServer):
     allow_reuse_address = True
@@ -23,9 +27,11 @@ class MyTCPServerHandler(SocketServer.BaseRequestHandler):
         try:
             #take the data and print it
             data = self.request.recv(1024).strip()
-            print data
+            results = formatter(data)
+            print results[0]
+            print results[1]
             # send some 'ok' back
-            self.request.sendall(json.dumps({"Content-type":"text/plain", 'result':'ok'}))
+            self.request.sendall("""HTTP/1.0 200 OK\r Content-Type: text/plain;""")
         except Exception, e:
             print "Exception while receiving message: ", e
 
