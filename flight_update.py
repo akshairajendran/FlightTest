@@ -81,3 +81,7 @@ def to_epoch(date):
 
 def from_epoch(date):
     return datetime.datetime.utcfromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S')
+
+#get flight info from fa_id
+def flight_info(fa_id):
+    return api.service.FlightInfoEx(fa_id,10,0)
