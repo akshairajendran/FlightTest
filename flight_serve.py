@@ -2,7 +2,7 @@ __author__ = 'arajendran'
 
 import SocketServer
 import json
-import db_func
+import time
 
 #define functions to clean and handle data
 def formatter(data):
@@ -26,14 +26,13 @@ class MyTCPServerHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         try:
             #take the data and print it
-            data = self.request.recv(1024).strip()
-            results = formatter(data)
-            print results[0]
-            print results[1]
+            data = self.request.recv(9192).strip()
             # send some 'ok' back
-            self.request.sendall("""HTTP/1.0 200 OK\r Content-Type: text/plain;""")
+            self.request.sendall("HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + "2" + "\r\n\r\n" + "ok")
+            print data
         except Exception, e:
             print "Exception while receiving message: ", e
+
 
 server = MyTCPServer(('127.0.0.1', 13167), MyTCPServerHandler)
 server.serve_forever()
