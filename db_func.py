@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from passlib.hash import sha256_crypt
 import datetime
 import HTML
+from flight_update import from_epoch
 
 from gen_db import Base, Users, Flights
 
@@ -148,3 +149,26 @@ def get_attr(attr, flightid):
     else:
         return False
 
+def get_allfid(date_in, ident):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
+                    'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
+    inv_fc = {v:k for k, v in flight_codes.items()}
+    air_code = ident[:3]
+    #we've pulled out the airline and flight_no
+    airline = inv_fc[air_code]
+    flight_no = ident[3:]
+
+    #we need to format the date we'll be getting in epoch form to just a date
+    date = datetime.datetime.strptime(from_epoch(date_in),'%Y-%m-%d %H:%M:%S').date()
+
+    #now let's query all flights matching the departure date, airline and flight no
+    flights = session.query(Flights).filter(Flights.date == date, Flights.carrier == airline, Flights.flight_no == flight_no).all()
+
+    #append to this list the id of each object in flights
+    ids = [i.id for i in flights]
+    return ids

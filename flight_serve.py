@@ -2,22 +2,6 @@ __author__ = 'arajendran'
 
 import SocketServer
 import json
-import time
-
-#define functions to clean and handle data
-def formatter(data):
-    #returns long_desc and ident
-    index = data.index('{')
-    data = str(data[index:] + '}}')
-    longdesc_index = data.index('long_desc')
-    shortdesc_index = data.index('short_desc')
-    ident_index = data.index('ident')
-    aircraft_index = data.index('aircrafttype')
-    long_desc = data[longdesc_index:shortdesc_index-3].translate(None,'"')
-    ident = data[ident_index:aircraft_index-3].translate(None,'"')
-    long_desc = long_desc[long_desc.index(':')+1:]
-    ident = ident[ident.index(':')+1:]
-    return [long_desc, ident]
 
 class MyTCPServer(SocketServer.ThreadingTCPServer):
     allow_reuse_address = True
@@ -29,6 +13,7 @@ class MyTCPServerHandler(SocketServer.BaseRequestHandler):
             data = self.request.recv(9192).strip()
             # send some 'ok' back
             self.request.sendall("HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + "2" + "\r\n\r\n" + "ok")
+            data = json.loads(data[data.index('{'):])
             print data
         except Exception, e:
             print "Exception while receiving message: ", e
