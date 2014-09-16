@@ -146,6 +146,8 @@ def get_attr(attr, flightid):
         return flight.flight_no
     elif attr == 'recipient':
         return flight.recipient
+    elif attr == 'user':
+        return flight.user.username
     else:
         return False
 
