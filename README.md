@@ -6,3 +6,4 @@ TO-DO:
 1) Add multiple recipients
 2) Match flight notification on departure airport too
 3) On arrival make flight old and delete notification
+4) Fix flights operated by someone else
