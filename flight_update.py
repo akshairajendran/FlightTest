@@ -46,7 +46,7 @@ def del_alert(date, carrier, flight_no):
     carrier_code = flight_codes[carrier]
     ident = str(carrier_code) + str(flight_no)
     all_alerts = get_alert()
-    match = [i for i in all_alerts[1] if i.ident == ident and i.date_start == to_epoch(date)]
+    match = [i for i in all_alerts[1] if i.user_ident == ident and i.date_start == to_epoch(date)]
     alert_id = match[0].alert_id
     try:
         api.service.DeleteAlert(alert_id)
