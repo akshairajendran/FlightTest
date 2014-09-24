@@ -2,6 +2,7 @@ __author__ = 'arajendran'
 
 import SocketServer
 import json
+import flight_dispatch
 
 class MyTCPServer(SocketServer.ThreadingTCPServer):
     allow_reuse_address = True
@@ -14,7 +15,7 @@ class MyTCPServerHandler(SocketServer.BaseRequestHandler):
             # send some 'ok' back
             self.request.sendall("HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + "2" + "\r\n\r\n" + "ok")
             data = json.loads(data[data.index('{'):])
-            print data
+            flight_dispatch.main(data)
         except Exception, e:
             print "Exception while receiving message: ", e
 

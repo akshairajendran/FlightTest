@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from passlib.hash import sha256_crypt
 import datetime
-import HTML
 from flight_update import from_epoch
 
 from gen_db import Base, Users, Flights
@@ -102,7 +101,7 @@ def check_flight(user=None, date=None, carrier=None, flight_no=None, flightid=No
         carrier = flight.carrier
         flight_no = flight.flight_no
     else:
-        date = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+        date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     query = session.query(Flights).filter(Flights.user != q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
     if hasattr(query, 'date'):
         return True
@@ -123,7 +122,7 @@ def check_myflight(user=None, date=None, carrier=None, flight_no=None, flightid=
         carrier = flight.carrier
         flight_no = flight.flight_no
     else:
-        date = datetime.datetime.strptime(date, '%Y-%M-%d').date()
+        date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     query = session.query(Flights).filter(Flights.user == q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
     if hasattr(query, 'date'):
         return True

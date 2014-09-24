@@ -51,40 +51,30 @@ def email(recipient, message):
         print "Didn't work"
     return
 
-def checkmail(mail):
-        DNS.DiscoverNameServers()
-        print "checking %s..."%(mail)
-        hostname = mail[mail.find('@')+1:]
-        mx_hosts = DNS.mxlookup(hostname)
-        failed_mx = True
-        for mx in mx_hosts:
-                smtp = smtplib.SMTP()
-                try:
-                        smtp.connect(mx[1])
-                        print "Stage 1 (MX lookup & connect) successful."
-                        failed_mx = False
-                        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        s.connect((mx[1], 25))
-                        s.recv(1024)
-                        s.send("HELO %s\n"%(mx[1]))
-                        s.recv(1024)
-                        s.send("MAIL FROM:< test@test.com>\n")
-                        s.recv(1024)
-                        s.send("RCPT TO:<%s>\n"%(mail))
-                        result = s.recv(1024)
-                        print result
-                        if result.find('Recipient address rejected') > 0:
-                                print "Failed at stage 2 (recipient does not exist)"
-                        else:
-                                print "Adress valid."
-                                failed_mx = False
-                        s.send("QUIT\n")
-                        break
-                except smtplib.SMTPConnectError:
-                        continue
-        if failed_mx:
-                print "Failed at stage 1 (MX lookup & connect)."
-        print ""
-        if not failed_mx:
-                return True
-        return False
+def text(recipient, message):
+    #we just gonna text att, tmo, verizon and sprint...wutever
+    att = recipient + '@txt.att.net'
+    tmo = recipient + '@tmomail.net'
+    vzw = recipient + '@vtext.com'
+    sprint = recipient + '@messaging.sprintpcs.com'
+    try:
+        email(att, message)
+        email(tmo, message)
+        email(vzw, message)
+        email(sprint, message)
+    except:
+        print "Didn't work"
+    return
+
+def main(data):
+    #this function takes data from an incoming flight update and dispatches it accordingly
+    #pull the departure date, ident, message from the data
+    date = data['flight']['filed_departuretime']
+    ident = data['flight']['ident']
+    message = data['long_desc']
+    #build the list of recipients
+    recips = all_recip(date,ident)
+    #dispatch the message
+    dispatch(recips,message)
+    #if it's an arrival, mark those flight id's as old (change the binary)
+
