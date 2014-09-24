@@ -3,8 +3,7 @@ __author__ = 'Akshai Rajendran'
 from db_func import get_attr, get_allfid, mark_old
 from flight_update import del_alert
 from smtplib import SMTP_SSL
-from email.mime.text import MIMEText
-import DNS, smtplib, socket
+import datetime
 
 
 #open config file and get username and api key
@@ -71,6 +70,7 @@ def main(data):
     #this function takes data from an incoming flight update and dispatches it accordingly
     #pull the departure date, ident, message from the data
     date = data['flight']['filed_departuretime']
+    date_format = datetime.datetime.utcfromtimestamp(date).strftime('%Y-%m-%d')
     ident = data['flight']['ident']
     airport_from = data['flight']['origin'][1:]
     event = data['eventcode']
@@ -88,9 +88,9 @@ def main(data):
         inv_fc = {v:k for k, v in flight_codes.items()}
         air_code = ident[:3]
         #we've pulled out the airline and flight_no
-        airline = inv_fc[air_code]
-        flight_no = ident[3:]
-        del_alert(date,airline,flight_no,airport_from)
+        airline = str(inv_fc[air_code])
+        flight_no = str(ident[3:])
+        del_alert(date_format,airline,flight_no,airport_from)
     else:
         pass
 
