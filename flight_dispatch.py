@@ -1,6 +1,7 @@
 __author__ = 'Akshai Rajendran'
 
-from db_func import get_attr, get_allfid
+from db_func import get_attr, get_allfid, mark_old
+from flight_update import del_alert
 from smtplib import SMTP_SSL
 from email.mime.text import MIMEText
 import DNS, smtplib, socket
@@ -15,10 +16,10 @@ mailbox = credentials[2]
 pwd = credentials[3]
 
 #this function gets all recipients for a given flight and date
-def all_recip(date,ident):
+def all_recip(date,ident,airport_from):
     #give this function a date as an epoch and an ident it will give you all receipients for that flight
     #returns recipients in form [user,recipient]
-    ids = get_allfid(date,ident)
+    ids = get_allfid(date,ident,airport_from)
     recips = [[get_attr('user',id),get_attr('recipient',id)] for id in ids]
     return recips
 
@@ -71,10 +72,27 @@ def main(data):
     #pull the departure date, ident, message from the data
     date = data['flight']['filed_departuretime']
     ident = data['flight']['ident']
+    airport_from = data['flight']['origin'][1:]
+    event = data['eventcode']
     message = data['long_desc']
     #build the list of recipients
-    recips = all_recip(date,ident)
+    recips = all_recip(date,ident,airport_from)
     #dispatch the message
     dispatch(recips,message)
     #if it's an arrival, mark those flight id's as old (change the binary)
+    if event == 'arrival':
+        ids = get_allfid(date,ident,airport_from)
+        mark_old(ids)
+        flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
+                    'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
+        inv_fc = {v:k for k, v in flight_codes.items()}
+        air_code = ident[:3]
+        #we've pulled out the airline and flight_no
+        airline = inv_fc[air_code]
+        flight_no = ident[3:]
+        del_alert(date,airline,flight_no,airport_from)
+    else:
+        pass
+
+
 

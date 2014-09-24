@@ -147,10 +147,12 @@ def get_attr(attr, flightid):
         return flight.recipient
     elif attr == 'user':
         return flight.user.username
+    elif attr =='airport_from':
+        return flight.airport_from
     else:
         return False
 
-def get_allfid(date_in, ident):
+def get_allfid(date_in, ident,airport_from):
     engine = create_engine('sqlite:///flighttest.db')
     Base.metadata.bind = engine
     DBSession = sessionmaker()
@@ -168,8 +170,21 @@ def get_allfid(date_in, ident):
     date = datetime.datetime.strptime(from_epoch(date_in),'%Y-%m-%d %H:%M:%S').date()
 
     #now let's query all flights matching the departure date, airline and flight no
-    flights = session.query(Flights).filter(Flights.date == date, Flights.carrier == airline, Flights.flight_no == flight_no).all()
+    flights = session.query(Flights).filter(Flights.date == date, Flights.carrier == airline, Flights.flight_no == flight_no, Flights.airport_from == airport_from).all()
 
     #append to this list the id of each object in flights
     ids = [i.id for i in flights]
     return ids
+
+def mark_old(ids):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    #take in a list of flight ids and switch their binaries, because they landed!
+    for id in ids:
+        flight = session.query(Flights).filter(Flights.id == id).first()
+        flight.binary = 1
+        session.commit()
+    return
