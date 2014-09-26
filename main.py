@@ -59,15 +59,19 @@ class Root:
         <option value="Virgin">Virgin</option>
         </select><br />
         Flight No.: <input type="number" name="flight_no"/><br />
-        Recipient: <input type="text" name="recipient"/><br />
+        Recipient: <input type="text" name="recipient1"/><br />
+        Recipient: <input type="text" name="recipient2"/><br />
+        Recipient: <input type="text" name="recipient3"/><br />
+        Recipient: <input type="text" name="recipient4"/><br />
+        Recipient: <input type="text" name="recipient5"/><br />
         <input type="submit" value="Add Flight" /></br>
         <a href="/home">Home</a>
         </form></html></body>""" % locals()
 
     @cherrypy.expose
     @require()
-    def add_flight(self, airport_from=None, airport_to=None, date=None, carrier=None, flight_no=None, recipient=None):
-        if len(airport_from) < 1 or len(airport_to) < 1 or date=='' or len(carrier) < 1 or len(flight_no) < 1 or len(recipient) < 1:
+    def add_flight(self, airport_from=None, airport_to=None, date=None, carrier=None, flight_no=None, recipient1=None, recipient2=None, recipient3=None,recipient4=None,recipient5=None):
+        if len(airport_from) < 1 or len(airport_to) < 1 or date=='' or len(carrier) < 1 or len(flight_no) < 1 or len(recipient1) < 1:
             return self.new_flight("Please enter all information")
         else:
             if db_func.check_myflight(user=cherrypy.request.login,date=date, carrier=carrier, flight_no=flight_no):
@@ -81,7 +85,9 @@ class Root:
                     flight_update.set_alert(airport_from,airport_to,date,carrier,flight_no)
                 else:
                     return self.new_flight("Please enter a valid flight")
-            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no, recipient)
+            all_recipients = [recipient1,recipient2,recipient3,recipient4,recipient5]
+            recipients = [recip for recip in all_recipients if len(recip)>=5]
+            db_func.add_flight(cherrypy.request.login,airport_from,airport_to,date,carrier,flight_no, recipients)
             return self.home(msg="Your flight has been added.")
 
     @cherrypy.expose
