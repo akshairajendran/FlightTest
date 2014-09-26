@@ -84,14 +84,7 @@ def main(data):
     if event == 'arrival':
         ids = get_allfid(date,ident,airport_from)
         mark_old(ids)
-        flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
-                        'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
-        inv_fc = {v:k for k, v in flight_codes.items()}
-        air_code = ident[:3]
-        #we've pulled out the airline and flight_no
-        airline = str(inv_fc[air_code])
-        flight_no = str(ident[3:])
-        del_alert(date_format,airline,flight_no,airport_from)
+        del_alert(date=date_format,airport_from=airport_from,identifier=ident)
     else:
         pass
 
