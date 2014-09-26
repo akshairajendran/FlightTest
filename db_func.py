@@ -6,7 +6,7 @@ from passlib.hash import sha256_crypt
 import datetime
 from flight_update import from_epoch, match_alert
 
-from gen_db import Base, Users, Flights
+from gen_db import Base, Users, Flights, Recipients
 
 def add_user(user,pwd):
     engine = create_engine('sqlite:///flighttest.db')
@@ -52,9 +52,14 @@ def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipie
     date_format = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     match = match_alert(date,carrier,flight_no,airport_from)
     ident = match.ident
-    new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, recipient = recipient, ident=ident)
+    new_flight = Flights(airport_from = airport_from, airport_to = airport_to, date = date_format, carrier = carrier, flight_no = flight_no, ident=ident)
     new_flight.user = q
     session.add(new_flight)
+    session.commit()
+    flight = session.query(Flights).filter(Flights.user == q, Flights.airport_from == airport_from, Flights.airport_to == airport_to, Flights.date == date_format, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
+    new_recipient = Recipients(recipient = recipient)
+    new_recipient.flight = flight
+    session.add(new_recipient)
     session.commit()
     return None
 
@@ -73,10 +78,20 @@ def display_flights(user, binary):
         list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no] for i in range(len(all_flights))]
     else:
         all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
-        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, all_flights[i].recipient, '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
+        list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/rec_flight?flightid='+str(all_flights[i].id)+'">Recipients</a>', '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
     session.commit()
     return list
 
+def display_recipients(user, flight_id):
+    engine = create_engine('sqlite:///flighttest.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker()
+    session = DBSession()
+
+    q = session.query(Users).filter(Users.username == user).first()
+    all_recipients = session.query(Recipients).filter(Recipients.flight_id == flight_id).all()
+    list = [[all_recipients[i].recipient] for i in range(len(all_recipients))]
+    return list
 
 def del_flight(user, flightid):
     engine = create_engine('sqlite:///flighttest.db')

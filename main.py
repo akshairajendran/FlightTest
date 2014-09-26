@@ -106,6 +106,16 @@ class Root:
 
     @cherrypy.expose
     @require()
+    def rec_flight(self,flightid):
+        list = db_func.display_recipients(cherrypy.request.login,flightid)
+        htmlcode = HTML.table(list, ['Recipients'])
+        return """<html><body>
+        %s </br>
+        <a href="/home">Home</a>
+        </body></html>""" % htmlcode
+
+    @cherrypy.expose
+    @require()
     def del_flight(self,flightid):
         if db_func.check_flight(user=cherrypy.request.login,flightid=flightid):
             pass

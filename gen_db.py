@@ -30,10 +30,18 @@ class Flights(Base):
     date = Column(Date)
     carrier = Column(String(50))
     flight_no = Column(Integer)
-    recipient = Column(String(100))
     ident = Column(String(10))
     fa_flightid = Column(String(50))
     binary = Column(Integer, default = 0)
+
+class Recipients(Base):
+    __tablename__ = 'recipients'
+
+    id = Column(Integer, primary_key=True)
+    flight_id = Column(Integer, ForeignKey('flights.id'))
+    flight = relationship(Flights, backref=backref('recipients', uselist=True))
+    recipient = Column(String(100))
+
 
 engine = create_engine('sqlite:///flighttest.db')
 
