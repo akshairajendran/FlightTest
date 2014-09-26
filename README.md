@@ -4,4 +4,4 @@ With this service you can notify people via email or text with flight updates fo
 
 TO-DO:
 1) Add multiple recipients
-2) Fix flights operated by someone else
+
