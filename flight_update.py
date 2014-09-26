@@ -39,15 +39,20 @@ def set_alert(airport_from, airport_to, date, carrier, flight_no):
             return False
     else:
         return False
-#delete alert
-def del_alert(date, carrier, flight_no, airport_from):
+#match alert
+def match_alert(date,carrier,flight_no,airport_from):
     flight_codes = {'Delta':'DAL', 'United': 'UAL', 'Southwest':'SWA', 'AirTran':'TRS', 'Alaska':'ASA', 'American':'AAL',
                     'Frontier':'FFT', 'Hawaiian':'HAL','JetBlue':'JBU','Spirit':'NKS','US Airways':'AWE', 'Virgin':'VRD' }
     carrier_code = flight_codes[carrier]
     ident = str(carrier_code) + str(flight_no)
     all_alerts = get_alert()
     match = [i for i in all_alerts[1] if (i.user_ident == ident or i.ident == ident) and i.date_start == to_epoch(date) and i.origin[1:] == airport_from]
-    alert_id = match[0].alert_id
+    return match[0]
+
+#delete alert
+def del_alert(date, carrier, flight_no, airport_from):
+    match = match_alert(date,carrier,flight_no,airport_from)
+    alert_id = match.alert_id
     try:
         api.service.DeleteAlert(alert_id)
         return True

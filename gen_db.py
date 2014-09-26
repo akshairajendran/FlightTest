@@ -31,6 +31,8 @@ class Flights(Base):
     carrier = Column(String(50))
     flight_no = Column(Integer)
     recipient = Column(String(100))
+    ident = Column(String(10))
+    fa_flightid = Column(String(50))
     binary = Column(Integer, default = 0)
 
 engine = create_engine('sqlite:///flighttest.db')
