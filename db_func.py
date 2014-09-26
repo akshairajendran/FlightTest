@@ -91,6 +91,7 @@ def display_recipients(user, flight_id):
     q = session.query(Users).filter(Users.username == user).first()
     all_recipients = session.query(Recipients).filter(Recipients.flight_id == flight_id).all()
     list = [[all_recipients[i].recipient] for i in range(len(all_recipients))]
+    session.commit()
     return list
 
 def del_flight(user, flightid):
@@ -101,6 +102,7 @@ def del_flight(user, flightid):
 
     q = session.query(Users).filter(Users.username == user).first()
     flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).delete()
+    recipients = session.query(Recipients).filter(Recipients.flight_id == flightid).delete()
     session.commit()
     return
 
@@ -153,6 +155,7 @@ def get_attr(attr, flightid):
     session = DBSession()
 
     flight = session.query(Flights).filter(Flights.id == flightid).first()
+    recipients = session.query(Recipients).filter(Recipients.flight_id == flightid).all()
 
     if attr == 'date':
         return flight.date.strftime('%Y-%m-%d')
@@ -161,7 +164,7 @@ def get_attr(attr, flightid):
     elif attr == 'flight_no':
         return flight.flight_no
     elif attr == 'recipient':
-        return flight.recipient
+        return [recipients[i].recipient for i in range(len(recipients))]
     elif attr == 'user':
         return flight.user.username
     elif attr =='airport_from':

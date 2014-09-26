@@ -22,15 +22,16 @@ def all_recip(date,ident,airport_from):
     recips = [[get_attr('user',id),get_attr('recipient',id)] for id in ids]
     return recips
 
-#this function sends a message to a list of [user,recipient] pairings
+#this function sends a message to a list of [user,[recipient1,recipient2,...]] pairings
 def dispatch(list,msg):
     for i in list:
         message = str(i[0]) + "'s flight " + msg
-        #if it's an email address
-        if '@' in i[1]:
-            email(i[1], message)
-        else:
-            text(i[1], message)
+        for recip in i[1]:
+            #if it's an email address
+            if '@' in recip:
+                email(recip, message)
+            else:
+                text(recip, message)
 
 #define the email and text functions
 def email(recipient, message):
