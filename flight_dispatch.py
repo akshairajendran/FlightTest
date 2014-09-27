@@ -81,7 +81,7 @@ def main(data):
     #dispatch the message
     dispatch(recips,message)
     #if it's an arrival, mark those flight id's as old (change the binary)
-    if event == 'arrival':
+    if event == 'arrival' or event == 'cancelled':
         ids = get_allfid(date,ident,airport_from)
         mark_old(ids)
         del_alert(date=date_format,airport_from=airport_from,identifier=ident)
