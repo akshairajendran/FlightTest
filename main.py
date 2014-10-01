@@ -5,6 +5,7 @@ from auth import AuthController, require, member_of, name_is
 import db_func
 import HTML
 import flight_update
+import os
 
 class Root:
 
@@ -17,7 +18,11 @@ class Root:
 
     @cherrypy.expose
     def index(self):
-        return """<html><body>
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/index.css"/>
+        </head>
+        <body>
             <p>Welcome to FlightTest!</p>
             <a href="/auth/login">Login</a>
             <a href="/auth/register">Register</a>
@@ -130,6 +135,15 @@ class Root:
         db_func.del_flight(cherrypy.request.login, int(flightid))
         raise cherrypy.HTTPRedirect("/upcoming_flights")
 
-
 if __name__ == '__main__':
-    cherrypy.quickstart(Root())
+    conf = {
+     '/': {
+         'tools.sessions.on': True,
+         'tools.staticdir.root': os.path.abspath(os.getcwd())
+     },
+     '/static': {
+         'tools.staticdir.on': True,
+         'tools.staticdir.dir': './pub/'
+     }
+    }
+    cherrypy.quickstart(Root(),'/',conf)
