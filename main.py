@@ -23,9 +23,11 @@ class Root:
         <link rel="stylesheet" type="text/css" href="static/css/index.css"/>
         </head>
         <body>
-            <p>Welcome to FlightTest!</p>
-            <a href="/auth/login">Login</a>
-            <a href="/auth/register">Register</a>
+            <div class='main'>
+                <p>Welcome to FlightTest!</p>
+                <a href="/auth/login">Login</a>
+                <a href="/auth/register">Register</a>
+            </div>
         </body></html>"""
 
     @cherrypy.expose
