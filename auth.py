@@ -110,23 +110,43 @@ class AuthController(object):
         """Called on logout"""
 
     def get_loginform(self, username, msg="Enter login information", from_page="/"):
-        return """<html><body>
-            <form method="post" action="/auth/login">
-            <input type="hidden" name="from_page" value="%(from_page)s" />
-            %(msg)s<br />
-            Username: <input type="text" name="username" value="%(username)s" /><br />
-            Password: <input type="password" name="password" /><br />
-            <input type="submit" value="Log in" />
+        return """<html>
+            <head>
+            <link rel="stylesheet" type="text/css" href="../static/css/login.css"/>
+            </head>
+            <body>
+                <div class='main'>
+                    <form method="post" action="/auth/login">
+                    <input type="hidden" name="from_page" value="%(from_page)s" />
+                    <p>%(msg)s<br /></p>
+                    <div class ='username'>
+                        <p1 id='user'>Username: </p1><input type="text" name="username" value="%(username)s" /><br />
+                    </div>
+                    <div class='password'>
+                        <p1 id='pwd'>Password: </p1><input type="password" name="password" /><br />
+                    </div>
+                    <input type="submit" value="Log in" />
+                </div>
         </body></html>""" % locals()
 
     def get_registerform(self, username, msg="Create login information", from_page="/"):
-        return """<html><body>
-            <form method="post" action="/auth/register">
-            <input type="hidden" name="from_page" value="%(from_page)s" />
-            %(msg)s<br />
-            Username: <input type="text" name="username" value="%(username)s" /><br />
-            Password: <input type="password" name="password" /><br />
-            <input type="submit" value="Register" />
+        return """<html>
+            <head>
+            <link rel="stylesheet" type="text/css" href="../static/css/register.css"/>
+            </head>
+            <body>
+                <div class='main'>
+                    <form method="post" action="/auth/register">
+                    <input type="hidden" name="from_page" value="%(from_page)s" />
+                    <p>%(msg)s<br /></p>
+                    <div class ='username'>
+                        <p1 id='user'>Username: </p1><input type="text" name="username" value="%(username)s" /><br />
+                    </div>
+                    <div class='password'>
+                        <p1 id='pwd'>Password: </p1><input type="password" name="password" /><br />
+                    </div>
+                    <input type="submit" value="Register" />
+                </div>
         </body></html>""" % locals()
 
     @cherrypy.expose
