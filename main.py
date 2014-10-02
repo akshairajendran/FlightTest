@@ -33,46 +33,62 @@ class Root:
     @cherrypy.expose
     @require()
     def home(self,msg="You're now logged in."):
-        return """<html><body>
-            <p>Hello %s</p>
-            %s</br></br>
-            <a href="/new_flight">New Flight</a></br>
-            <a href="/previous_flights">Previous Flights</a></br>
-            <a href="/upcoming_flights">Upcoming Flights</a></br>
-            <a href="/auth/logout">Logout</a></br>
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/home.css"/>
+        </head>
+        <body>
+            <div class='main'>
+                <p>Hello %s</p>
+                <p1>%s</br></br></p1>
+                <a href="/new_flight">New Flight</a></br>
+                <a href="/previous_flights">Previous Flights</a></br>
+                <a href="/upcoming_flights">Upcoming Flights</a></br>
+                <a href="/auth/logout">Logout</a></br>
+            </div>
         </html></body>""" %(cherrypy.request.login, msg)
 
     @cherrypy.expose
     @require()
     def new_flight(self, msg="Add new flight"):
-        return """<html><body>
-        <form method="post" action="/add_flight">
-        %(msg)s<br />
-        Departure Airport: <input type="text" name="airport_from"/><br />
-        Arrival Airport: <input type="text" name="airport_to"/><br />
-        Date: <input type="date" name="date"/><br />
-        Carrier: <select name="carrier">
-        <option value="AirTran">AirTran</option>
-        <option value="Alaska">Alaska</option>
-        <option value="American">American</option>
-        <option value="Delta">Delta</option>
-        <option value="Frontier">Frontier</option>
-        <option value="Hawaiian">Hawaiian</option>
-        <option value="JetBlue">JetBlue</option>
-        <option value="Southwest">Southwest</option>
-        <option value="Spirit">Spirit</option>
-        <option value="United">United</option>
-        <option value="US Airways">US Airways</option>
-        <option value="Virgin">Virgin</option>
-        </select><br />
-        Flight No.: <input type="number" name="flight_no"/><br />
-        Recipient: <input type="text" name="recipient1"/><br />
-        Recipient: <input type="text" name="recipient2"/><br />
-        Recipient: <input type="text" name="recipient3"/><br />
-        Recipient: <input type="text" name="recipient4"/><br />
-        Recipient: <input type="text" name="recipient5"/><br />
-        <input type="submit" value="Add Flight" /></br>
-        <a href="/home">Home</a>
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/newflight.css"/>
+        </head>
+        <body>
+        <div class='main'>
+            <form method="post" action="/add_flight">
+            <p>%(msg)s<br /></p>
+            <div class='inputs'>
+                <p1>Departure Airport: </p1><input type="text" name="airport_from"/><br />
+                <p1>Arrival Airport: </p1><input type="text" name="airport_to"/><br />
+                <p1>Date: </p1><input type="date" name="date"/><br />
+                <p1>Carrier: </p1><select name="carrier">
+                <option value="AirTran">AirTran</option>
+                <option value="Alaska">Alaska</option>
+                <option value="American">American</option>
+                <option value="Delta">Delta</option>
+                <option value="Frontier">Frontier</option>
+                <option value="Hawaiian">Hawaiian</option>
+                <option value="JetBlue">JetBlue</option>
+                <option value="Southwest">Southwest</option>
+                <option value="Spirit">Spirit</option>
+                <option value="United">United</option>
+                <option value="US Airways">US Airways</option>
+                <option value="Virgin">Virgin</option>
+                </select><br />
+                <p1>Flight No.: </p1><input type="number" name="flight_no"/><br />
+                <p1>Recipient: </p1><input type="text" name="recipient1"/><br />
+                <p1>Recipient: </p1><input type="text" name="recipient2"/><br />
+                <p1>Recipient: </p1><input type="text" name="recipient3"/><br />
+                <p1>Recipient: </p1><input type="text" name="recipient4"/><br />
+                <p1>Recipient: </p1><input type="text" name="recipient5"/><br />
+            </div>
+            <div class='bottom'>
+                <input type="submit" value="Add Flight" /></br>
+                <a href="/home">Home</a>
+            </div>
+        </div>
         </form></html></body>""" % locals()
 
     @cherrypy.expose
