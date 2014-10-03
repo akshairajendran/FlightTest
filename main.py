@@ -60,10 +60,10 @@ class Root:
             <form method="post" action="/add_flight">
             <p>%(msg)s<br /></p>
             <div class='inputs'>
-                <p1>Departure Airport: </p1><input type="text" name="airport_from"/><br />
-                <p1>Arrival Airport: </p1><input type="text" name="airport_to"/><br />
-                <p1>Date: </p1><input type="date" name="date"/><br />
-                <p1>Carrier: </p1><select name="carrier">
+                <label>Departure Airport: </label><input type="text" name="airport_from"/><br />
+                <label>Arrival Airport: </label><input type="text" name="airport_to"/><br />
+                <label>Date: </label><input type="date" name="date"/><br />
+                <label>Carrier: </label><select name="carrier">
                 <option value="AirTran">AirTran</option>
                 <option value="Alaska">Alaska</option>
                 <option value="American">American</option>
@@ -77,12 +77,12 @@ class Root:
                 <option value="US Airways">US Airways</option>
                 <option value="Virgin">Virgin</option>
                 </select><br />
-                <p1>Flight No.: </p1><input type="number" name="flight_no"/><br />
-                <p1>Recipient: </p1><input type="text" name="recipient1"/><br />
-                <p1>Recipient: </p1><input type="text" name="recipient2"/><br />
-                <p1>Recipient: </p1><input type="text" name="recipient3"/><br />
-                <p1>Recipient: </p1><input type="text" name="recipient4"/><br />
-                <p1>Recipient: </p1><input type="text" name="recipient5"/><br />
+                <label>Flight No.: </label><input type="number" name="flight_no"/><br />
+                <label>Recipient: </label><input type="text" name="recipient1"/><br />
+                <label>Recipient: </label><input type="text" name="recipient2"/><br />
+                <label>Recipient: </label><input type="text" name="recipient3"/><br />
+                <label>Recipient: </label><input type="text" name="recipient4"/><br />
+                <label>Recipient: </label><input type="text" name="recipient5"/><br />
             </div>
             <div class='bottom'>
                 <input type="submit" value="Add Flight" /></br>
@@ -152,6 +152,10 @@ class Root:
             flight_update.del_alert(date=db_func.get_attr('date',flightid),carrier=db_func.get_attr('carrier',flightid),flight_no=db_func.get_attr('flight_no',flightid), airport_from=db_func.get_attr('airport_from',flightid))
         db_func.del_flight(cherrypy.request.login, int(flightid))
         raise cherrypy.HTTPRedirect("/upcoming_flights")
+
+cherrypy.config.update({
+    'server.socket_port':22428
+})
 
 if __name__ == '__main__':
     conf = {

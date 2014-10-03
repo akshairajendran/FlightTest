@@ -16,8 +16,8 @@ body {
 }
 
 .main {
-    height:460px;
-    width:500px;
+    height:450px;
+    width:600px;
     background-color:white;
     border-radius:25px;
     border: 2px solid;
@@ -25,8 +25,8 @@ body {
     position:absolute;
     left:50%;
     top:50%;
-    margin-left:-250px;
-    margin-top:-230px;
+    margin-left:-300px;
+    margin-top:-225px;
 }
 
 p {
@@ -39,8 +39,13 @@ p {
 
 .bottom {
     position:absolute;
-    bottom:10px;
-    left:207px;
+    bottom:18px;
+    left:257px;
+    text-align:center;
+}
+
+.bottom input {
+    margin-bottom:4px;
 }
 
 a:link {
@@ -61,15 +66,30 @@ a:hover {
    color:grey;
 }
 
-p1 {
+label {
     font-family:Lato;
     color:black;
     font-size:18px;
-    margin-bottom:0px;
+    margin-bottom:5px;
+    padding:0;
+    width:155px;
+    float:left;
+    clear:left;
+}
 
+.inputs input, select {  
+    margin-top:5px;
+    padding:0;
+    float:left;
+}
+
+label, input, select {
+    display:inline;
+    vertical-align:baseline;
 }
 
 .inputs {
-    position:absolute;
-    left:20%;
+    position:relative;
+    text-align:left;
+    left:160px;
 }
