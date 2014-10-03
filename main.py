@@ -118,9 +118,18 @@ class Root:
     def previous_flights(self):
         list = db_func.display_flights(cherrypy.request.login,1)
         htmlcode = HTML.table(list, ['Departure Airport','Arrival Airport','Date','Carrier','Flight No.'])
-        return """<html><body>
-        %s </br>
-        <a href="/home">Home</a>
+        htmlcode = htmlcode.replace('border: 1px','border: 0px')
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/prevflight.css"/>
+        </head>
+        <body>
+        <div class='main'>
+            <div class='table'>
+                %s </br>
+            </div>
+            <a href="/home">Home</a>
+        </div>
         </body></html>""" % htmlcode
 
     @cherrypy.expose
@@ -128,9 +137,18 @@ class Root:
     def upcoming_flights(self):
         list = db_func.display_flights(cherrypy.request.login,0)
         htmlcode = HTML.table(list, ['Departure Airport','Arrival Airport','Date','Carrier','Flight No.'])
-        return """<html><body>
-        %s </br>
-        <a href="/home">Home</a>
+        htmlcode = htmlcode.replace('border: 1px','border: 0px')
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/upcflight.css"/>
+        </head>
+        <body>
+        <div class='main'>
+            <div class='table'>
+                %s </br>
+            </div>
+            <a href="/home">Home</a>
+        </div>
         </body></html>""" % htmlcode
 
     @cherrypy.expose
@@ -138,9 +156,18 @@ class Root:
     def rec_flight(self,flightid):
         list = db_func.display_recipients(cherrypy.request.login,flightid)
         htmlcode = HTML.table(list, ['Recipients'])
-        return """<html><body>
-        %s </br>
-        <a href="/home">Home</a>
+        htmlcode = htmlcode.replace('border: 1px','border: 0px')
+        return """<html>
+        <head>
+        <link rel="stylesheet" type="text/css" href="static/css/recflight.css"/>
+        </head>
+        <body>
+        <div class='main'>
+            <div class='table'>
+                %s </br>
+            </div>
+            <a href="/home">Home</a>
+        </div>
         </body></html>""" % htmlcode
 
     @cherrypy.expose
