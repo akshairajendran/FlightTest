@@ -11,7 +11,9 @@ body {
     position: relative;
     min-height:100%;
     overflow:hidden;
-    background-color:#00BFFF;
+	background-repeat:no-repeat center center fixed;
+    background-image:url("../images/plane_bg.jpg");
+	background-size:cover;
 
 }
 
