@@ -20,11 +20,13 @@ def add_user(user,pwd):
     if pwd == "":
         return "Please enter a valid password"
     if hasattr(q, 'username'):
+        session.close()
         return "Username already exists"
     else:
         new_user = Users(username=user,password=sha256_crypt.encrypt(pwd))
         session.add(new_user)
         session.commit()
+        session.close()
         return None
 
 def check_user(user,pwd):
@@ -36,10 +38,13 @@ def check_user(user,pwd):
     q = session.query(Users).filter(Users.username == user).first()
     if hasattr(q, 'username'):
         if sha256_crypt.verify(pwd, q.password):
+            session.close()
             return None
         else:
+            session.close()
             return "Incorrect password"
     else:
+        session.close()
         return "User does not exist"
 
 def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipients):
@@ -62,6 +67,7 @@ def add_flight(user, airport_from, airport_to, date, carrier, flight_no, recipie
         new_recipient.flight = flight
         session.add(new_recipient)
         session.commit()
+    session.close()
     return None
 
 def display_flights(user, binary):
@@ -81,6 +87,7 @@ def display_flights(user, binary):
         all_flights = session.query(Flights).filter(Flights.user == q, Flights.binary == binary).all()
         list = [[all_flights[i].airport_from, all_flights[i].airport_to, all_flights[i].date, all_flights[i].carrier, all_flights[i].flight_no, '<a href="/rec_flight?flightid='+str(all_flights[i].id)+'">Recipients</a>', '<a href="/del_flight?flightid='+str(all_flights[i].id)+'">Delete</a>'] for i in range(len(all_flights))]
     session.commit()
+    session.close()
     return list
 
 def display_recipients(user, flight_id):
@@ -93,6 +100,7 @@ def display_recipients(user, flight_id):
     all_recipients = session.query(Recipients).filter(Recipients.flight_id == flight_id).all()
     list = [[all_recipients[i].recipient] for i in range(len(all_recipients))]
     session.commit()
+    session.close()
     return list
 
 def del_flight(user, flightid):
@@ -105,6 +113,7 @@ def del_flight(user, flightid):
     flight = session.query(Flights).filter(Flights.user == q, Flights.id == flightid).delete()
     recipients = session.query(Recipients).filter(Recipients.flight_id == flightid).delete()
     session.commit()
+    session.close()
     return
 
 def check_flight(user=None, date=None, carrier=None, flight_no=None, flightid=None):
@@ -124,8 +133,10 @@ def check_flight(user=None, date=None, carrier=None, flight_no=None, flightid=No
         date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     query = session.query(Flights).filter(Flights.user != q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
     if hasattr(query, 'date'):
+        session.close()
         return True
     else:
+        session.close()
         return False
 
 def check_myflight(user=None, date=None, carrier=None, flight_no=None, flightid=None):
@@ -145,8 +156,10 @@ def check_myflight(user=None, date=None, carrier=None, flight_no=None, flightid=
         date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     query = session.query(Flights).filter(Flights.user == q, Flights.date == date, Flights.carrier == carrier, Flights.flight_no == flight_no).first()
     if hasattr(query, 'date'):
+        session.close()
         return True
     else:
+        session.close()
         return False
 
 def get_attr(attr, flightid):
@@ -208,4 +221,5 @@ def mark_old(ids):
         flight = session.query(Flights).filter(Flights.id == id).first()
         flight.binary = 1
         session.commit()
+    session.close()
     return

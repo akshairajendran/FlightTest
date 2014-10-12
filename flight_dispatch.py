@@ -80,7 +80,15 @@ def main(data):
     recips = all_recip(date,ident,airport_from)
     #dispatch the message
     dispatch(recips,message)
+    #once it's departed we'll mark it old
+    if event == 'departure':
+        ids = get_allfid(date,ident,airport_from)
+        mark_old(ids)
+    else:
+        pass
     #if it's an arrival, mark those flight id's as old (change the binary)
+    #we do this a second time in case it didn't work the first time
+    #also delete the alert because we're now done tracking it
     if event == 'arrival' or event == 'cancelled':
         ids = get_allfid(date,ident,airport_from)
         mark_old(ids)
