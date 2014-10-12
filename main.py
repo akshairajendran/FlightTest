@@ -20,6 +20,7 @@ class Root:
     def index(self):
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="static/css/index.css"/>
         </head>
@@ -36,6 +37,7 @@ class Root:
     def home(self,msg="You're now logged in."):
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <link rel="stylesheet" type="text/css" href="static/css/home.css"/>
         </head>
         <body>
@@ -54,6 +56,7 @@ class Root:
     def new_flight(self, msg="Add new flight"):
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <link rel="stylesheet" type="text/css" href="static/css/newflight.css"/>
         </head>
         <body>
@@ -122,6 +125,7 @@ class Root:
         htmlcode = htmlcode.replace('border: 1px','border: 0px')
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <link rel="stylesheet" type="text/css" href="static/css/prevflight.css"/>
         </head>
         <body>
@@ -141,6 +145,7 @@ class Root:
         htmlcode = htmlcode.replace('border: 1px','border: 0px')
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <link rel="stylesheet" type="text/css" href="static/css/upcflight.css"/>
         </head>
         <body>
@@ -160,6 +165,7 @@ class Root:
         htmlcode = htmlcode.replace('border: 1px','border: 0px')
         return """<html>
         <head>
+        <title>FlyteShare</title>
         <link rel="stylesheet" type="text/css" href="static/css/recflight.css"/>
         </head>
         <body>
@@ -182,7 +188,7 @@ class Root:
         raise cherrypy.HTTPRedirect("/upcoming_flights")
 
 cherrypy.config.update({
-    'server.socket_port':22428
+    'server.socket_port':13913
 })
 
 if __name__ == '__main__':
@@ -194,6 +200,10 @@ if __name__ == '__main__':
      '/static': {
          'tools.staticdir.on': True,
          'tools.staticdir.dir': './pub/'
+     },
+     '/favicon.ico': {
+         'tools.staticfile.on': True,
+         'tools.staticfile.filename':'images/flyteshare.ico'
      }
     }
     cherrypy.quickstart(Root(),'/',conf)

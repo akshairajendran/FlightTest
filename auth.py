@@ -112,6 +112,7 @@ class AuthController(object):
     def get_loginform(self, username, msg="Enter login information", from_page="/"):
         return """<html>
             <head>
+            <title>FlyteShare</title>
             <link rel="stylesheet" type="text/css" href="../static/css/login.css"/>
             </head>
             <body>
@@ -132,6 +133,7 @@ class AuthController(object):
     def get_registerform(self, username, msg="Create login information", from_page="/"):
         return """<html>
             <head>
+            <title>FlyteShare</title>
             <link rel="stylesheet" type="text/css" href="../static/css/register.css"/>
             </head>
             <body>
