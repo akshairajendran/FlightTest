@@ -3,6 +3,7 @@ config.txt
 .idea/
 
 *.pyc
+gen_db.pyc
 
 # Windows image file caches
 Thumbs.db
