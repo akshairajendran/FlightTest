@@ -25,7 +25,7 @@ class Root:
         </head>
         <body>
             <div class='main'>
-                <p>Welcome to FlightTest!</p>
+                <p>Welcome to FlyteShare!</p>
                 <a href="/auth/login">Login</a>
                 <a href="/auth/register">Register</a>
             </div>

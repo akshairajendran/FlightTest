@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.INFO)
 api = Client(url, username=username, password=apiKey)
 
 #set endpoint
-def reg_endpoint(endpoint = 'http://akshairajendran.com/flightserve'):
+def reg_endpoint(endpoint = 'http://flyteshare.com/flightserve'):
     api.service.RegisterAlertEndpoint(endpoint,'json/post')
 
 #set alert for new flight

@@ -36,7 +36,7 @@ def dispatch(list,msg):
 #define the email and text functions
 def email(recipient, message):
     #setup from and to addr
-    from_addr = 'flight_serve@akshairajendran.com'
+    from_addr = 'update@flyteshare.com'
     to_addr = recipient
 
     #setup connection
@@ -45,7 +45,7 @@ def email(recipient, message):
     s.login(mailbox,pwd)
 
     #setup message
-    msg = 'Subject: %s\n\n%s' % ('Flight update from FlightServe', message)
+    msg = 'Subject: %s\n\n%s' % ('Flight update from FlyteShare', message)
     try:
         s.sendmail(from_addr,to_addr,msg)
     except:
