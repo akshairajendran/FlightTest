@@ -7,5 +7,5 @@ TO-DO:
 
 	--This is kind of accomplished, I make it old after departure or arrival, could still fail though
 
-2) Make username case insensitive when logging in
+2) Maybe send short messages if it's a text, long if it's an email
 
