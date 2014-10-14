@@ -1,6 +1,6 @@
 __author__ = 'arajendran'
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from passlib.hash import sha256_crypt
 import datetime
@@ -14,7 +14,7 @@ def add_user(user,pwd):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
-    q = session.query(Users).filter(Users.username == user).first()
+    q = session.query(Users).filter(func.lower(Users.username) == func.lower(user)).first()
     if user == "":
         return "Please enter a valid username"
     if pwd == "":
@@ -35,7 +35,7 @@ def check_user(user,pwd):
     DBSession = sessionmaker()
     session = DBSession()
 
-    q = session.query(Users).filter(Users.username == user).first()
+    q = session.query(Users).filter(func.lower(Users.username) == func.lower(user)).first()
     if hasattr(q, 'username'):
         if sha256_crypt.verify(pwd, q.password):
             session.close()
